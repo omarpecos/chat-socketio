@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Sockets IO</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+   <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script> -->
+</head>
+<body>
+    <style>
+        #cont_mensajes{
+            width: 50%;background: cyan;
+            border: solid 2px black;
+
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        #cont_mensajes p{
+            background: white;
+            padding: 5px;border: 
+            solid 1px black;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .chat{
+            display: none;
+        }
+
+        .msg_normal img ,.msg_privado_recibido img{
+            position:relative;
+            top:3px;
+        }
+        .msg_priv_recibido { 
+           color : green;
+        }
+        .msg_priv_enviado {
+           color :darkviolet;
+        }
+
+    </style>
+    <h1 id="titulo">SocketIO</h1>
+
+    <form id="login_form">
+        <h3>Ingresar</h3>
+
+        <input type="text" name="" id="correo" placeholder="Correo" value="">
+        <input type="text" name="" id="usuario" placeholder="Usuario" value="">
+        <input type="button" name="" value="Entrar" onclick="ingresar()">
+    
+        <br>
+                <hr>
+    </form>
+
+    
+    <h2 class="chat">Chat</h2>
+   
+        <div class="chat" id="cont_mensajes"></div>
+    
+       
+    </div>
+<br>
+<div class="chat">
+    <div  style="display: flex;justify-content: flex-start;align-items: center;">
+        <textarea name="" placeholder="Mensaje" id="mensaje"  style="width: 500px;"></textarea>
+       <!--  <input type="text" id="receptor" name="" placeholder="destinatario"> -->
+
+        <select id="receptor">
+            
+        </select>
+
+        <button id="enviar_msj" onclick="enviar_mensj()" style="background: yellowgreen;color:white;padding: 10px;">Enviar</button>
+    </div>
+</div>
+   
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="funciones_socket.js"></script>
+    <script>
+        function ingresar(){
+            correo = $('#login_form #correo').val();
+            usuario = $('#login_form #usuario').val();
+            
+            loguear(correo,usuario);
+            $("#login_form").css('display','none');
+            $(".chat").css('display','block');
+
+            $("#titulo").html(usuario);
+        }
+
+        function enviar_mensj(){
+            textarea = $('#mensaje');
+             msj = textarea.val();
+             destinatario = $("#receptor").val();
+             if (destinatario != ''){
+                enviar_msj(usuario,msj,destinatario);
+             }else{
+                enviar_msj(usuario,msj);
+             }
+            
+             textarea.val('');
+        }
+
+        function actualiza_lista(users){
+            select =  $("#receptor");
+             select.html('');
+             select.append('<option value="">GLOBAL</option>'); 
+            for (var i = 0; i<users.length;i++){
+                select.append('<option value="'+users[i]+'">'+users[i]+'</option>');   
+            }
+        }
+    </script>
+   
+</body>
+</html>
